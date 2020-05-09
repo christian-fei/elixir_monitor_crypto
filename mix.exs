@@ -29,6 +29,7 @@ defmodule ElixirMonitorCrypto.MixProject do
     [
       {:httpoison, "~> 1.6"},
       {:poison, "~> 3.1"},
+      {:websockex, "~> 0.4.2"},
       {:mox, "~> 0.5.2", only: :test}
     ]
   end
