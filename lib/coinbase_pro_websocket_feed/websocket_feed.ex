@@ -1,17 +1,18 @@
 defmodule CoinbasePro.WebsocketFeed do
   use WebSockex
 
-  def start_link(state) do
-    {:ok, pid} = WebSockex.start_link("wss://ws-feed.pro.coinbase.com", __MODULE__, state)
-    init(pid)
+  def start_link([channel]) do
+    IO.inspect(channel, label: "CoinbasePro.WebsocketFeed")
+    {:ok, pid} = WebSockex.start_link("wss://ws-feed.pro.coinbase.com", __MODULE__, [])
+    init(pid, channel)
     {:ok, pid}
   end
 
-  defp init (pid) do
+  defp init(pid, channel \\ "ticker") do
     msg = Poison.encode!(%{
       type: "subscribe",
       product_ids: ["BTC-EUR"],
-      channels: ["heartbeat", "ticker", "status", "level2"]
+      channels: [channel]
     })
     WebSockex.send_frame(pid, {:text, msg})
   end

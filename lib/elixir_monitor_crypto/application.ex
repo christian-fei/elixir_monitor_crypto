@@ -7,7 +7,10 @@ defmodule ElixirMonitorCrypto.Application do
 
   def start(_type, _args) do
     children = [
-      {CoinbasePro.WebsocketFeed, []}
+      Supervisor.child_spec({CoinbasePro.WebsocketFeed, ["heartbeat"]}, id: :heartbeat),
+      Supervisor.child_spec({CoinbasePro.WebsocketFeed, ["ticker"]}, id: :ticker),
+      Supervisor.child_spec({CoinbasePro.WebsocketFeed, ["status"]}, id: :status),
+      Supervisor.child_spec({CoinbasePro.WebsocketFeed, ["level2"]}, id: :level2)
     ]
     opts = [strategy: :one_for_one, name: ElixirMonitorCrypto.Supervisor]
     Supervisor.start_link(children, opts)
